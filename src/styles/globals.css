@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F7FAFC;
+  }
+}
+
+@layer components {
+  .card {
+    background-color: white;
+    border-radius: 32px;
+    box-shadow: 0 4px 10px 4px rgba(184, 184, 184, 0.15);
+    width: 100%;
+    height: 100%;
+  }
+
+  .square-3xl {
+    height: 216px;
+    width: 216px;
+  }
+
+  .rect-3xl-half {
+    height: 50%;
+    width: 324px;
+  }
+
+  .rect-3xl-full {
+    height: 100%;
+    width: 648px;
+  }
+
+  .rect-5xl-full {
+    height: 100%;
+    width: 864px;
+  }
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar-track {
+    background: green;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background-color: green;
+  }
+}

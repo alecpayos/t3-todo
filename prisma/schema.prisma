@@ -4,59 +4,173 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "foreignKeys"
 }
 
 model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Necessary for Next auth
-model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+model NextAuthAccount {
+  id                String  @id @default(cuid())
+  user              Users   @relation(fields: [userId], references: [id], onDelete: NoAction)
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? // @db.Text
+  access_token      String? // @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? // @db.Text
+  session_state     String?
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
-model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Users {
+  id              String            @id @default(cuid())
+  accountId       String
+  authorizationId String
+  account         Accounts          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  authorizations  Authorizations    @relation(fields: [authorizationId], references: [id], onDelete: Cascade)
+  username        String
+  email           String
+  syncPassword    String
+  dashPassword    String
+  createdAt       DateTime
+  updatedAt       DateTime
+  NextAuthAccount NextAuthAccount[]
+  Offices         Offices?          @relation(fields: [officesId], references: [id])
+  officesId       String?
+
+  @@unique([username, email, syncPassword, dashPassword])
 }
 
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+model Accounts {
+  id          String    @id @default(cuid())
+  firstName   String
+  lastName    String
+  birthDate   DateTime?
+  countryCode String?
+  phoneNumber String?
+  timezone    String?
+  createdAt   DateTime
+  updatedAt   DateTime
+  Users       Users[]
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+model Authorizations {
+  id              String    @id @default(cuid())
+  google2faSecret String?
+  last2faAt       DateTime?
+  lastIpAddress   String?
+  lastLogin       DateTime?
+  createdAt       DateTime
+  updatedAt       DateTime
+  Users           Users[]
+}
 
-    @@unique([identifier, token])
+model Patients {
+  id             String      @id @default(cuid())
+  dicomPatientId String      @unique
+  name           String?
+  birthDate      DateTime?
+  createdAt      DateTime
+  updatedAt      DateTime
+  Medias         Medias[]
+  Worklists      Worklists[]
+}
+
+model Medias {
+  id               String      @id @default(cuid())
+  patientId        String
+  patient          Patients    @relation(fields: [patientId], references: [id], onDelete: NoAction)
+  studyInstanceUID String
+  path             String?
+  type             String?
+  meta             String
+  createdAt        DateTime
+  updatedAt        DateTime
+  Worklists        Worklists[]
+}
+
+model Worklists {
+  id               String    @id @default(cuid())
+  officeId         String
+  patientId        String
+  mediaId          String
+  office           Offices   @relation(fields: [officeId], references: [id], onDelete: NoAction)
+  patient          Patients  @relation(fields: [patientId], references: [id], onDelete: NoAction)
+  media            Medias    @relation(fields: [mediaId], references: [id], onDelete: NoAction)
+  dentistName      String?
+  radiologistName  String?
+  shareLink        String?
+  dismissStatus    Boolean?
+  dismissReason    String?
+  dismissAt        DateTime?
+  processingStatus String?
+  reportImages     Boolean?
+  timezone         String?
+  createdAt        DateTime
+  updatedAt        DateTime
+
+  @@unique([officeId, patientId, mediaId])
+}
+
+model Offices {
+  id                      String        @id @default(cuid())
+  users                   Users[]
+  manufacturerId          String
+  acquisitionId           String
+  manufacturer            Manufacturers @relation(fields: [manufacturerId], references: [id], onDelete: NoAction)
+  acquisition             Acquisition   @relation(fields: [acquisitionId], references: [id], onDelete: NoAction)
+  name                    String
+  addressLineOne          String
+  addressLineTwo          String?
+  city                    String
+  state                   String?
+  zicode                  Int?
+  phone                   String?
+  primaryContactName      String?
+  primaryContantEmail     String?
+  technicalContactName    String?
+  technicalContactEmail   String?
+  technicalContactCompany String?
+  technicalContactPhone   String?
+  createdAt               DateTime
+  updatedAt               DateTime
+  Worklists               Worklists[]
+
+  @@unique([manufacturerId, acquisitionId])
+}
+
+model Manufacturers {
+  id                         String    @id @default(cuid())
+  practiceManagementSoftware String?
+  manufacturer               String?
+  imagingSoftware            String?
+  createdAt                  DateTime
+  updatedAt                  DateTime
+  Offices                    Offices[]
+}
+
+model Acquisition {
+  id                   String    @id @default(cuid())
+  style                String?
+  machineHostname      String?
+  machineMacAddress    String?
+  machineRemoteAddress String?
+  machineLastAccess    DateTime?
+  createdAt            DateTime
+  updatedAt            DateTime
+  Offices              Offices[]
 }
