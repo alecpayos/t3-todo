@@ -14,7 +14,7 @@ env:
   DISCORD_CLIENT_ID: ""
   DISCORD_CLIENT_SECRET=: ""
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NXP_CLERK_PK }}
-  CLERK_SECRET_KEY: ${{ CLERK_SK }}
+  CLERK_SECRET_KEY: ${{ secrets.CLERK_SK }}
 
 jobs:
   build:
