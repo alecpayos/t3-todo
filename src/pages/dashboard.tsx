@@ -2,7 +2,7 @@ import { type NextPage } from "next"
 import { SignOutButton, useUser } from "@clerk/nextjs"
 import { useEffect } from "react"
 import { useRouter } from "next/router"
-import { generateCards } from "./components/dashboard/cards"
+import { generateCards } from "../components/cards"
 
 const Dashboard: NextPage = () => {
   const { isSignedIn, user } = useUser()
