@@ -1,5 +1,4 @@
-import { NextComponentType } from "next";
-import Layout from "./layout";
+import { type NextComponentType } from "next";
 
 const Account: NextComponentType = () => {
   return(

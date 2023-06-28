@@ -6,12 +6,11 @@ import { generateCards } from "./components/dashboard/cards"
 
 const Dashboard: NextPage = () => {
   const { isSignedIn, user } = useUser()
-  const router = useRouter()
-
+  const router= useRouter()
+  
   useEffect(() => {
-    console.log(process.env)
-    isSignedIn || router.push('/')
-  }, [isSignedIn])
+    isSignedIn || void router.push('/')
+  }, [isSignedIn, router])
 
   return(
     <section className="

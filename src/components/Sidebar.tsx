@@ -5,10 +5,12 @@ import { useEffect } from "react"
 import { useRouter } from "next/router"
 import { activateSidebarItem } from "./helpers"
 
-import toothIcon from "public/assets/tooth.svg"
-import qrIcon from "public/assets/qr.svg"
-import uploadIcon from "public/assets/upload.svg"
-import accountIcon from "public/assets/gear.svg"
+import {
+  toothIcon,
+  qrIcon,
+  uploadIcon,
+  accountIcon
+} from "^/assets/ImageController"
 
 const Sidebar: React.ElementType = () => {
   const { pathname } = useRouter()

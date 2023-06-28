@@ -8,7 +8,7 @@ const Login: NextPage = () => {
   const router = useRouter()
 
   if(isSignedIn) {
-    router.push('/dashboard')
+    void router.push('/dashboard')
     return <></>;
   }
 

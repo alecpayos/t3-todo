@@ -1,4 +1,4 @@
-import { NextComponentType } from "next"
+import { type NextComponentType } from "next"
 
 const Upload: NextComponentType = () => {
   return(

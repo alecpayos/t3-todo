@@ -34,6 +34,6 @@ export const attachScrollHandler = () => {
   const content = document.getElementById('dashboardContent') as HTMLElement
   content.onscroll = (event: Event) => {
     const { scrollTop } = (event?.target as HTMLElement)
-    // !scrollTop ||
+    return scrollTop
   }
 }

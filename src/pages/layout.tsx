@@ -1,5 +1,4 @@
 import { useUser } from "@clerk/nextjs"
-import type React from "react"
 import Persona from "~/components/Persona"
 import Sidebar from "~/components/Sidebar"
 
