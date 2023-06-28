@@ -45,7 +45,7 @@ model Users {
   username        String
   email           String
   syncPassword    String
-  dashPassword    String
+  dashPassword    String?
   createdAt       DateTime
   updatedAt       DateTime
   NextAuthAccount NextAuthAccount[]
