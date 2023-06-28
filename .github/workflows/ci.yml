@@ -8,6 +8,14 @@ on:
     branches:
       - main
 
+env:
+  DATABASE_URL: "https://fake.com"
+  NEXTAUTH_SECRET: ${{ secrets.NXA_SECRET }}
+  DISCORD_CLIENT_ID: ""
+  DISCORD_CLIENT_SECRET=: ""
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NXP_CLERK_PK }}
+  CLERK_SECRET_KEY: ${{ CLERK_SK }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
